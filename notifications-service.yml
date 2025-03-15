@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: notifications-service
+  config:
+    import: optional:configserver:http://config-server:8888
+  data:
+    mongodb:
+      username: admin
+      password: password
+      host: host.docker.internal  # MongoDB in Docker
+      port: 27017
+      database: notifications
+      authentication-database: admin
+
+  kafka:
+    consumer:
+      bootstrap-server: host.docker.internal:9092  # Kafka in Docker
+      group-id: comunicazioni-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: >
+          communicationConfirmation:com.azienda.gestionale.notifications.kafka.communications.CommunicationConfirmation,
+          newsConfirmation:com.azienda.gestionale.notifications.kafka.news.NewsConfirmation
+
+  mail:
+    host: mailhog-service
+    port: 1080
+    username: admin
+    password: password
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+
