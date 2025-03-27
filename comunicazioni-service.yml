@@ -5,7 +5,7 @@ spring:
     import: optional:configserver:http://config-server:8888
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres-service:5432/dipendenti
+    url: jdbc:postgresql://postgres-service:5432/comunicazioni
     username: admin
     password: password
   jpa:
