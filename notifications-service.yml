@@ -7,7 +7,7 @@ spring:
     mongodb:
       username: admin
       password: password
-      host: host.docker.internal  # MongoDB in Docker
+      host: mongodb-service
       port: 27017
       database: notifications
       authentication-database: admin
