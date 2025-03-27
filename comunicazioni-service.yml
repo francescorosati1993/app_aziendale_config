@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: comunicazioni-service
+  config:
+    import: optional:configserver:http://config-server:8888
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres-service:5432/dipendenti
+    username: admin
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          dipendente-service:
+            url: http://dipendente-service:8070/app/dipendente
+
+  kafka:
+    bootstrap-servers: host.docker.internal:9092
+    producer:
+      group-id: comunicazioni-group
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: >
+          communicationConfirmation:com.azienda.gestionale.comunicazioni.kafka.CommunicationConfirmation,
+          newsConfirmation:com.azienda.gestionale.comunicazioni.kafka.NewsConfirmation
+
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${server.port}  # Imposta un nome leggibile per il servizio
+    hostname: comunicazioni-service  # Imposta il nome corretto del servizio
+    prefer-ip-address: false  # Usa il nome host invece dell'IP
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+
+
+server:
+  port: 8071
+
+application:
+  config:
+    dipendente-url: http://dipendente-service:8070/app/dipendente
+    posizione-url: http://dipendente-service:8070/app/posizione
+    dipartimento-url: http://dipendente-service:8070/app/dipartimento
