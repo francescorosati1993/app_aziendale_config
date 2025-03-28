@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: curriculum-service
+  config:
+    import: optional:configserver:http://config-server:8888
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres-service:5432/curriculums
+    username: admin
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          dipendente-service:
+            url: http://dipendente-service:8070/app/dipendente
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    hostname: curriculum-service
+    prefer-ip-address: false
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+
+server:
+  port: 8073
+
+application:
+  config:
+    dipendente-url: http://dipendente-service:8070/app/dipendente
+    posizione-url: http://dipendente-service:8070/app/posizione
+    dipartimento-url: http://dipendente-service:8070/app/dipartimento
+
